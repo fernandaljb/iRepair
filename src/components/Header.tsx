@@ -7,7 +7,7 @@ export function Header() {
       <div className=" flex justify-between items-center">
         <h1 className="font-bold text-xl">iRepair</h1>
         {/* temos que ter a borda e a cor da borda */}
-        <p className="text-sm border border-white">Início</p>
+        <p className="text-sm border border-gray-600">Início</p>
       </div>
     </header>
   );
