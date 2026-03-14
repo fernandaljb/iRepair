@@ -1,7 +1,7 @@
 // formulário react para capturar dados
 // usando props e state para controlar os inputs
 import { useState } from "react";
-import { type os } from "../App";
+import { type os } from "../pages/DashboardPage";
 // essa interface indica quais propriedades que o componente NewServiceForm recebe
 interface NewServiceFormProps {
   conectar: (novaOS: os) => void;
