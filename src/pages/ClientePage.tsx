@@ -4,11 +4,13 @@ import type { Client } from "../types";
 
 export const ClientsPage = () => {
   const [clients, setClients] = useState<Client[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     async function load() {
       const data = await getAllClients();
       setClients(data);
+      setIsLoading(false);
     }
     load();
   }, []);
@@ -17,6 +19,8 @@ export const ClientsPage = () => {
     await deleteClient(id);
     setClients((prev) => prev.filter((c) => c.id !== id));
   }
+  // se estiver carregando mosrta Carregando
+  if (isLoading) return <p>Carregando...</p>;
 
   return (
     <ul>

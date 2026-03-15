@@ -6,3 +6,10 @@ export interface Client {
   email: string;
   created_at: string;
 }
+
+// Interface para o que você ENVIA ao servidor (POST /clients)
+export interface NewClient {
+  name: string;
+  phone: string;
+  email: string;
+}

@@ -1,12 +1,12 @@
 import { api } from "./api";
-import type { Client, CreateClientData } from "../types";
+import type { Client, NewClient } from "../types/client";
 
 export async function getAllClients(): Promise<Client[]> {
   const response = await api.get<Client[]>("/clients");
   return response.data;
 }
 
-export async function createClient(data: CreateClientData): Promise<Client> {
+export async function createClient(data: NewClient): Promise<Client> {
   const response = await api.post<Client>("/clients", data);
   return response.data;
 }
