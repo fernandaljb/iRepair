@@ -16,7 +16,7 @@ export function Header() {
           Início
         </Link>
         <Link to="/clients" className="text-sm border border-gray-600">
-          setClientIds
+          Clientes
         </Link>
         <Link to="/ordens" className="text-sm border border-gray-600 ">
           Ordens

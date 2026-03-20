@@ -2,74 +2,68 @@ import { useState, useEffect } from "react";
 import { ClientCard } from "../components/ClientCard";
 import { NewClientForm } from "../components/NewClientForm";
 import { type Client } from "../types/client";
-/* estamos importando as funções assíncronas que eu criei no services */
 import { getAllClients, deleteClient } from "../services/clientService";
-/* criando estados para os dados e para o carregamento */
+
 export function ClientsPage() {
   const [clients, set_clients] = useState<Client[]>([]);
   const [isLoading, setIsLoading] = useState(true);
 
-  /* useEffect para o código deixar de ser estático */
-  // pegamos o retorno da função e salvamos no estado
   useEffect(() => {
-    // Criamos uma função interna assíncrona
     async function carregar() {
       try {
-        const dados = await getAllClients(); // <--- O await entra aqui
-        set_clients(dados);
+        const dados = await getAllClients();
+        // Garante que o estado sempre receba um array para não quebrar o .map
+        set_clients(Array.isArray(dados) ? dados : []);
       } catch (error) {
-        console.error("Erro ao carregar");
+        console.error("Erro ao carregar clientes:", error);
       } finally {
         setIsLoading(false);
       }
     }
-
     carregar();
   }, []);
 
-  //Função para adicionar o novo setClientId na tela
-  const adicionarsetClientId = (novo: Client) => {
+  // Alterado de adicionarsetClientId para adicionarCliente
+  const adicionarCliente = (novo: Client) => {
     set_clients([novo, ...clients]);
   };
 
-  // Função para deletar o setClientId do banco e da tela
-  const removersetClientId = async (id: number) => {
-    if (!confirm("Remover setClientId?")) return;
+  // Alterado de removersetClientId para removerCliente
+  const removerCliente = async (id: number) => {
+    if (!confirm("Deseja realmente remover este cliente?")) return;
 
     try {
       await deleteClient(id);
       set_clients(clients.filter((c) => c.id !== id));
     } catch (error) {
-      alert("Erro");
+      alert("Erro ao excluir cliente.");
     }
   };
 
   return (
     <div className="bg-black min-h-screen">
       <main className="max-w-4xl mx-auto p-4">
-        {/* Formulário para cadastrar novo setClientId */}
-        <NewClientForm aoCadastrar={adicionarsetClientId} />
+        {/* Ajustado o nome da prop da função */}
+        <NewClientForm aoCadastrar={adicionarCliente} />
 
-        {/* Título da seção */}
         <h2 className="text-white text-2xl font-bold mb-6 border-b border-white pb-2">
-          Seus setClientIds
+          Seus Clientes
         </h2>
 
         {isLoading ? (
-          <p className="text-white">Loading state...</p>
+          <p className="text-white">Carregando clientes...</p>
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            {/* A correção principal está aqui: verificar se é Array antes do map */}
             {Array.isArray(clients) && clients.length > 0 ? (
               clients.map((client) => (
                 <ClientCard
-                  key={client.id}
+                  key={client.id} // Fundamental para o erro de console sumir
                   client={client}
-                  aoExcluir={removersetClientId}
+                  aoExcluir={removerCliente}
                 />
               ))
             ) : (
-              <p className="text-gray-400">Nenhum setClientId encontrado.</p>
+              <p className="text-gray-400">Nenhum cliente encontrado.</p>
             )}
           </div>
         )}

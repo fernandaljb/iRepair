@@ -14,17 +14,27 @@ export function DashboardPage() {
   >([]);
 
   useEffect(() => {
-    getAllServiceOrders().then((dados) => {
-      // Só salva se for uma lista real. Se for erro se torna lista vazia [].
-      set_lista_ordem_servico(Array.isArray(dados) ? dados : []);
-    });
+    // criando uma função async para usar axyo e não .then
+    const buscarDados = async () => {
+      try {
+        const dados = await getAllServiceOrders();
+        set_lista_ordem_servico(Array.isArray(dados) ? dados : []);
+      } catch (error) {
+        console.error("Erro ao carregar OS:", error);
+        set_lista_ordem_servico([]);
+      }
+    };
+
+    buscarDados();
   }, []);
+
   // criando a função que adiciona o item
   const adicionarOS = (novaOrdem: ServiceOrder) => {
     set_lista_ordem_servico([novaOrdem, ...lista_ordens_servico]);
   }; // a nova ordem entra primeiro na lista de ordens
+
   // ts criando a interface em html (jsx)
-  // FUNÇÃO DE DELETAR:
+  // função de deletar
   const removerOS = async (id: number) => {
     try {
       await deleteServiceOrder(id);
@@ -35,12 +45,13 @@ export function DashboardPage() {
       alert("Erro ao excluir ordem.");
     }
   };
+
   return (
     <div className="bg-black min-h-screen">
       <main>
         <NewServiceForm conectar={adicionarOS} />
         <div className="space-y-4 p-4">
-          {lista_ordens_servico.map((ordem_atual) => (
+          {lista_ordens_servico?.map((ordem_atual) => (
             <ServiceCard
               key={ordem_atual.id}
               ServiceOrder={ordem_atual}

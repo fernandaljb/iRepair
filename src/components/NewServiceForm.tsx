@@ -29,6 +29,7 @@ export function NewServiceForm({ conectar }: NewServiceFormProps) {
         setListaClientes(dados);
       } catch (error) {
         console.error("Erro ao carregar clientes");
+        setListaClientes([]);
       }
     }
     carregarClientes();
@@ -36,6 +37,10 @@ export function NewServiceForm({ conectar }: NewServiceFormProps) {
 
   // função que envia dados de volta para o pai
   const EnviaDados = async () => {
+    if (!ClienteId || !Modelo || !Defeito) {
+      alert("Por favor, preencha todos os campos antes de enviar.");
+      return;
+    }
     const novaOSData: NewServiceOrder = {
       client_id: Number(ClienteId),
       device: Modelo,

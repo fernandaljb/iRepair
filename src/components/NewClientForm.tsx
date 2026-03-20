@@ -33,7 +33,7 @@ export function NewClientForm({ aoCadastrar }: NewClientFormProps) {
 
   return (
     <div className="bg-black p-6 border border-white ">
-      <h2 className="text-xl font-bold text-white">NOVO setClientId</h2>
+      <h2 className="text-xl font-bold text-white">NOVO CLIENTE</h2>
 
       <input
         className="w-full border border-white p-2 text-white"
@@ -61,7 +61,7 @@ export function NewClientForm({ aoCadastrar }: NewClientFormProps) {
         onClick={salvar}
         className="w-full bg-white text-black font-bold py-2 cursor-pointer"
       >
-        CADASTRAR setClientId
+        CADASTRAR NOVO CLIENTE
       </button>
     </div>
   );
