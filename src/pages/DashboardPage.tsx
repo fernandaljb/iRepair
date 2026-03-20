@@ -1,34 +1,51 @@
 import { useState } from "react";
-import { Header } from "../components/Header";
 import { NewServiceForm } from "../components/NewServiceForm";
 import { ServiceCard } from "../components/ServiceCard";
-// Sua interface aqui
-export interface os {
-  Cliente: string;
-  Modelo: string;
-  Defeito: string;
-  Status: string;
-}
+import type { ServiceOrder } from "../types";
+import { getAllServiceOrders } from "../services/serviceServiceOrder";
+import { useEffect } from "react";
+import { deleteServiceOrder } from "../services/serviceServiceOrder";
 
 export function DashboardPage() {
   // criamos um estado na forma de lista vazia
   // [valor, funçãoParaMudarValor] = useState(valorInicial)
-  const [lista_ordens_servico, set_lista_ordem_servico] = useState<os[]>([]);
+  const [lista_ordens_servico, set_lista_ordem_servico] = useState<
+    ServiceOrder[]
+  >([]);
+
+  useEffect(() => {
+    getAllServiceOrders().then((dados) => {
+      // Só salva se for uma lista real. Se for erro se torna lista vazia [].
+      set_lista_ordem_servico(Array.isArray(dados) ? dados : []);
+    });
+  }, []);
   // criando a função que adiciona o item
-  const adicionarOS = (novaOrdem: os) => {
+  const adicionarOS = (novaOrdem: ServiceOrder) => {
     set_lista_ordem_servico([novaOrdem, ...lista_ordens_servico]);
   }; // a nova ordem entra primeiro na lista de ordens
   // ts criando a interface em html (jsx)
+  // FUNÇÃO DE DELETAR:
+  const removerOS = async (id: number) => {
+    try {
+      await deleteServiceOrder(id);
+      set_lista_ordem_servico(
+        lista_ordens_servico.filter((os) => os.id !== id),
+      );
+    } catch (error) {
+      alert("Erro ao excluir ordem.");
+    }
+  };
   return (
     <div className="bg-black min-h-screen">
-      <Header />
       <main>
-        {/* aqui é onde conectamos o a função adicionar ao componente newServiceForm por meio da função conectar */}
         <NewServiceForm conectar={adicionarOS} />
-
-        <div>
-          {lista_ordens_servico.map((ordem_atual, id) => (
-            <ServiceCard key={id} os={ordem_atual} />
+        <div className="space-y-4 p-4">
+          {lista_ordens_servico.map((ordem_atual) => (
+            <ServiceCard
+              key={ordem_atual.id}
+              ServiceOrder={ordem_atual}
+              aoExcluir={removerOS} // Passa a função para o Card
+            />
           ))}
         </div>
       </main>

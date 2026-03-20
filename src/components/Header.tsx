@@ -15,8 +15,8 @@ export function Header() {
         <Link to="/" className="text-sm border border-gray-600">
           Início
         </Link>
-        <Link to="/clientes" className="text-sm border border-gray-600">
-          Clientes
+        <Link to="/clients" className="text-sm border border-gray-600">
+          setClientIds
         </Link>
         <Link to="/ordens" className="text-sm border border-gray-600 ">
           Ordens

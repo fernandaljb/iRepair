@@ -1,4 +1,4 @@
-import axios from "axios"; /* biblioteca axio = busca dados do servidor do cliente*/
+import axios from "axios"; /* biblioteca axio = busca dados do servidor do setClientId*/
 //biblioteca de requisição http
 export const api = axios.create({
   /* criamos a isntância (objeto) chamada api */
