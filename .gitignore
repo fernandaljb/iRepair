@@ -22,3 +22,7 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+# ignorando meus readme que são minhas anotaçoes para aprender
+src/pages/README.md
+src/services/README.md
