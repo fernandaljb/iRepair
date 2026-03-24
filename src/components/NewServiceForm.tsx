@@ -15,7 +15,7 @@ interface NewServiceFormProps {
 export function NewServiceForm({ conectar }: NewServiceFormProps) {
   // lógica do componente os estados e as funções
   const [listaClientes, setListaClientes] = useState<Client[]>([]);
-  const [ClienteId, setClienteId] = useState("");
+  const [ClienteId, setClienteId] = useState<number | undefined>();
   const [Modelo, setModelo] = useState("");
   const [Defeito, setDefeito] = useState("");
   const [status, setstatus] = useState("Aberto");
@@ -42,10 +42,10 @@ export function NewServiceForm({ conectar }: NewServiceFormProps) {
       return;
     }
     const novaOSData: NewServiceOrder = {
-      client_id: Number(ClienteId),
+      clientId: Number(ClienteId),
       device: Modelo,
       issue: Defeito,
-      status: status === "Aberto" ? "OPEN" : "FINISHED",
+      status: status === "Aberto" ? "open" : "done",
     };
     try {
       setIsLoading(true);
@@ -53,7 +53,7 @@ export function NewServiceForm({ conectar }: NewServiceFormProps) {
       conectar(osSalvaNoBanco);
 
       /* limpar os campos */
-      setClienteId("");
+      setClienteId(undefined);
       setModelo("");
       setDefeito("");
       setstatus("Aberto");

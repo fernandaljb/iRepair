@@ -6,9 +6,9 @@ import type { Client, NewClient } from "../types/client";
 
 export async function getAllClients(): Promise<Client[]> {
   try {
-    const dados = await api.get<Client[]>("/clients");
+    const dados = await api.get("/clients");
     // Verifica se os dados realmente são um array antes de retornar
-    return Array.isArray(dados.data) ? dados.data : [];
+    return dados.data.data;
   } catch (error) {
     console.error("Erro ao buscar clientes:", error);
     return [];
@@ -17,8 +17,10 @@ export async function getAllClients(): Promise<Client[]> {
 
 /* função que le os dados que são digitados pelos usuários e envia ao servidor para criar novos setClientIds */
 export const createClient = async (data: NewClient): Promise<Client> => {
-  const dados = await api.post<Client>("/clients", data);
-  return dados.data;
+  const dados = await api.post("/clients", data);
+  // API retorna em dados.data.data (
+  // usado em getAllClients), então normaliza aqui também.
+  return dados.data?.data ?? dados.data;
 };
 
 /* função para deletar um setClientId pelo id*/

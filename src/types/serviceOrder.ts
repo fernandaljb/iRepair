@@ -3,7 +3,7 @@
 export interface ServiceOrder {
   /* // O que o servidor devolve (GET) e o que o Dashboard usa */
   id: number;
-  client_id: number;
+  clientId: number;
   device: string;
   issue: string;
   status: string;
@@ -12,8 +12,8 @@ export interface ServiceOrder {
 
 // O que o formulário envia (POST) - SEM id e SEM created_at
 export interface NewServiceOrder {
-  client_id: number;
+  clientId: number;
   device: string;
   issue: string;
-  status: string;
+  status: "open" | "in_progress" | "done";
 }

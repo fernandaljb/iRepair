@@ -5,27 +5,28 @@ import { type Client } from "../types/client";
 import { getAllClients, deleteClient } from "../services/clientService";
 
 export function ClientsPage() {
-  const [clients, set_clients] = useState<Client[]>([]);
+  const [clients, setClients] = useState<Client[]>([]);
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    async function carregar() {
-      try {
-        const dados = await getAllClients();
-        // Garante que o estado sempre receba um array para não quebrar o .map
-        set_clients(Array.isArray(dados) ? dados : []);
-      } catch (error) {
-        console.error("Erro ao carregar clientes:", error);
-      } finally {
-        setIsLoading(false);
-      }
-    }
     carregar();
   }, []);
 
+  async function carregar() {
+    try {
+      const dados = await getAllClients();
+      // Garante que o estado sempre receba um array para não quebrar o .map
+      setClients(dados);
+    } catch (error) {
+      console.error("Erro ao carregar clientes:", error);
+    } finally {
+      setIsLoading(false);
+    }
+  }
+
   // Alterado de adicionarsetClientId para adicionarCliente
   const adicionarCliente = (novo: Client) => {
-    set_clients([novo, ...clients]);
+    setClients([novo, ...clients]);
   };
 
   // Alterado de removersetClientId para removerCliente
@@ -34,7 +35,7 @@ export function ClientsPage() {
 
     try {
       await deleteClient(id);
-      set_clients(clients.filter((c) => c.id !== id));
+      setClients(clients.filter((c) => c.id !== id));
     } catch (error) {
       alert("Erro ao excluir cliente.");
     }
@@ -54,7 +55,7 @@ export function ClientsPage() {
           <p className="text-white">Carregando clientes...</p>
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            {Array.isArray(clients) && clients.length > 0 ? (
+            {clients && clients.length > 0 ? (
               clients.map((client) => (
                 <ClientCard
                   key={client.id} // Fundamental para o erro de console sumir
